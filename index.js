@@ -53,13 +53,9 @@ app.get('/about', (req, res) => {
 
 app.post('/submit', (req, res) => {
   const { employeeName, department } = req.body;
-  try {
     const employee = new Employee({ name: employeeName, department });
     employee.save();
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    res.send({ success: true });
 });
 
 // Export the Express API
