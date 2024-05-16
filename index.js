@@ -51,11 +51,11 @@ app.get('/about', (req, res) => {
   res.send('This is my about route..... ')
 })
 
-app.post('/submit', async (req, res) => {
+app.post('/submit', (req, res) => {
   const { employeeName, department } = req.body;
   try {
     const employee = new Employee({ name: employeeName, department });
-    await employee.save();
+    employee.save();
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
