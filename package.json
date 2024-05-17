@@ -6,8 +6,11 @@
     "start": "node api/index.js"
   },
   "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/mongoose": "^5.11.97",
+    "@vercel/node": "^3.1.5",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mongoose": "^5.12.3"
+    "express": "^4.19.2",
+    "mongoose": "^5.13.22"
   }
 }
