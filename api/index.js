@@ -1,11 +1,10 @@
-// index.js
-const express = require('express')
-
-const app = express()
-const PORT = 4000
-
+const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
+const app = express();
+const PORT = 4000;
+
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -39,24 +38,13 @@ const employeeSchema = new mongoose.Schema({
 
 const Employee = mongoose.model('Employee', employeeSchema);
 
-app.listen(PORT, () => {
-  console.log(`API listening on PORT ${PORT} `)
-})
-
 app.get('/', (req, res) => {
   res.send('Hey this is my API running 🥳')
-})
+});
 
 app.get('/about', (req, res) => {
   res.send('This is my about route..... ')
-})
-
-app.post('/submit', (req, res) => {
-  const { employeeName, department } = req.body;
-    const employee = new Employee({ name: employeeName, department });
-    employee.save();
-    res.send({ success: true });
 });
 
 // Export the Express API
-module.exports = app
+module.exports = app;
