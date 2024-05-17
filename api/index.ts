@@ -56,7 +56,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
       const employee = new Employee({ name: employeeName, department });
       await employee.save();
       res.send({ success: true });
-    } catch (err) {
+    } catch (err: any) {
       res.status(500).send({ success: false, error: err.message });
     }
   });
