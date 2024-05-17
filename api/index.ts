@@ -64,7 +64,7 @@ app.post('/api/updateDepartment', async (req, res) => {
     employee.department = newDepartment;
     await employee.save();
     res.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
