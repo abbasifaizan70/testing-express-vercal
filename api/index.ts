@@ -14,20 +14,17 @@ app.use(express.urlencoded({ extended: true }));
 
 const mongoUri = "mongodb://abbasifaizan1997:Oj6JbCQ9dG5C95EG@ac-yiqvbec-shard-00-00.uis11st.mongodb.net:27017,ac-yiqvbec-shard-00-01.uis11st.mongodb.net:27017,ac-yiqvbec-shard-00-02.uis11st.mongodb.net:27017/newapp?ssl=true&replicaSet=atlas-10nig4-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0";
 
-async function connectToDatabase() {
-  try {
-    await mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 30000,  // Increase timeout to 30 seconds
-    });
-    console.log("MongoDB connection successful");
-  } catch (err) {
-    console.error("MongoDB connection error:", err);
-  }
-}
-
-connectToDatabase();
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000,  // Increase timeout to 30 seconds
+})
+.then(() => {
+  console.log("MongoDB connection successful");
+})
+.catch((err) => {
+  console.error("MongoDB connection error:", err);
+});
 
 const employeeSchema = new mongoose.Schema({
   name: String,
@@ -40,7 +37,7 @@ const employeeSchema = new mongoose.Schema({
 
 const Employee = mongoose.model('Employee', employeeSchema);
 
-app.post('/submit', (req: VercelRequest, res: VercelResponse) => {
+app.post('/submit', (req, res) => {
   const { employeeName, department } = req.body;
   const employee = new Employee({ name: employeeName, department });
   employee.save()
