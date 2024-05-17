@@ -37,7 +37,7 @@ const employeeSchema = new mongoose.Schema({
 
 const Employee = mongoose.model('Employee', employeeSchema);
 
-app.post('/submit', (req: VercelRequest, res: VercelResponse) => {
+app.post('/submit', (req, res) => {
   const { employeeName, department } = req.body;
   const employee = new Employee({ name: employeeName, department });
   employee.save()
@@ -45,4 +45,6 @@ app.post('/submit', (req: VercelRequest, res: VercelResponse) => {
     .catch((err) => res.status(500).send({ success: false, error: err.message }));
 });
 
-export default app;
+export default (req: VercelRequest, res: VercelResponse) => {
+  app(req, res);
+};
