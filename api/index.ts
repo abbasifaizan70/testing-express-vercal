@@ -5,7 +5,7 @@ import express from 'express';
 
 const app = express();
 app.use(cors({
-  origin: '*',
+  origin: '*',  // Replace '*' with your frontend URL in production, e.g., 'https://your-frontend-domain.com'
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -37,16 +37,27 @@ const employeeSchema = new mongoose.Schema({
 
 const Employee = mongoose.model('Employee', employeeSchema);
 
-
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  const { employeeName, department } = req.query;
+  // Apply CORS middleware
+  const corsMiddleware = cors({
+    origin: '*',  // Replace '*' with your frontend URL in production
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  });
 
-  if (!employeeName || !department) {
-    return res.status(400).send({ success: false, error: "Missing employeeName or department query parameter" });
-  }
+  corsMiddleware(req, res, async () => {
+    const { employeeName, department } = req.query;
 
-  const employee = new Employee({ name: employeeName, department });
-  employee.save()
-    .then(() => res.send({ success: true }))
-    .catch((err) => res.status(200).send({ success: false, error: err.message }));
+    if (!employeeName || !department) {
+      return res.status(400).send({ success: false, error: "Missing employeeName or department query parameter" });
+    }
+
+    try {
+      const employee = new Employee({ name: employeeName, department });
+      await employee.save();
+      res.send({ success: true });
+    } catch (err) {
+      res.status(500).send({ success: false, error: err.message });
+    }
+  });
 }
