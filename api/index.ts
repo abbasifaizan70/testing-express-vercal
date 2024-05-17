@@ -22,7 +22,7 @@ mongoose.connect(mongoUri, {
 .then(() => {
   console.log("MongoDB connection successful");
 })
-.catch((err: any) => {
+.catch((err) => {
   console.error("MongoDB connection error:", err);
 });
 
@@ -37,38 +37,6 @@ const employeeSchema = new mongoose.Schema({
 
 const Employee = mongoose.model('Employee', employeeSchema);
 
-// Existing endpoint to save stage data
-app.post('/api/saveStage', async (req, res) => {
-  const { employeeName, stage, choice } = req.body;
-  try {
-    const employee = await Employee.findOne({ name: employeeName });
-    if (!employee) {
-      return res.status(400).json({ error: 'Employee not found.' });
-    }
-    employee[`stage${stage}`] = choice;
-    await employee.save();
-    res.json({ success: true });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// New endpoint to update the department of an employee
-app.post('/api/updateDepartment', async (req, res) => {
-  const { employeeName, newDepartment } = req.body;
-  try {
-    const employee = await Employee.findOne({ name: employeeName });
-    if (!employee) {
-      return res.status(400).json({ error: 'Employee not found.' });
-    }
-    employee.department = newDepartment;
-    await employee.save();
-    res.json({ success: true });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 export default function handler(req: VercelRequest, res: VercelResponse) {
   // Apply CORS middleware
   const corsMiddleware = cors({
@@ -77,17 +45,19 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     allowedHeaders: ['Content-Type', 'Authorization']
   });
 
-  corsMiddleware(req, res, () => {
-    if (req.method === 'POST') {
-      if (req.url === '/api/saveStage') {
-        app(req, res);
-      } else if (req.url === '/api/updateDepartment') {
-        app(req, res);
-      } else {
-        res.status(404).json({ error: 'Not found' });
-      }
-    } else {
-      res.status(405).json({ error: 'Method not allowed' });
+  corsMiddleware(req, res, async () => {
+    const { employeeName, department } = req.query;
+
+    if (!employeeName || !department) {
+      return res.status(400).send({ success: false, error: "Missing employeeName or department query parameter" });
+    }
+
+    try {
+      const employee = new Employee({ name: employeeName, department });
+      await employee.save();
+      res.send({ success: true });
+    } catch (err: any) {
+      res.status(500).send({ success: false, error: err.message });
     }
   });
 }
