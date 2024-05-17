@@ -39,9 +39,14 @@ const Employee = mongoose.model('Employee', employeeSchema);
 
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  const { employeeName, department} = req.query
+  const { employeeName, department } = req.query;
+
+  if (!employeeName || !department) {
+    return res.status(400).send({ success: false, error: "Missing employeeName or department query parameter" });
+  }
+
   const employee = new Employee({ name: employeeName, department });
   employee.save()
     .then(() => res.send({ success: true }))
-    .catch((err) => res.status(500).send({ success: false, error: err.message }));
+    .catch((err) => res.status(200).send({ success: false, error: err.message }));
 }
