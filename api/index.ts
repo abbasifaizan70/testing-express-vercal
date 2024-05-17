@@ -22,7 +22,7 @@ mongoose.connect(mongoUri, {
 .then(() => {
   console.log("MongoDB connection successful");
 })
-.catch((err) => {
+.catch((err: any) => {
   console.error("MongoDB connection error:", err);
 });
 
@@ -48,7 +48,7 @@ app.post('/api/saveStage', async (req, res) => {
     employee[`stage${stage}`] = choice;
     await employee.save();
     res.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
