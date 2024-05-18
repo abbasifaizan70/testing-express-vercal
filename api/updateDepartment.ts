@@ -12,7 +12,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const mongoUri = "mongodb://abbasifaizan1997:Oj6JbCQ9dG5C95EG@ac-yiqvbec-shard-00-00.uis11st.mongodb.net:27017,ac-yiqvbec-shard-00-01.uis11st.mongodb.net:27017,ac-yiqvbec-shard-00-02.uis11st.mongodb.net:27017/newapp?ssl=true&replicaSet=atlas-10nig4-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0";
+const mongoUri = "mongodb://deemaadle:flWrY9jrz7LkVFGN@ac-6pbvigq-shard-00-00.i87homf.mongodb.net:27017,ac-6pbvigq-shard-00-01.i87homf.mongodb.net:27017,ac-6pbvigq-shard-00-02.i87homf.mongodb.net:27017/Survey?ssl=true&replicaSet=atlas-wzoqyo-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
